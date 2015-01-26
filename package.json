@@ -21,5 +21,8 @@
     "gulp-util": "^3.0.1",
     "gulp-watch": "^1.0.7",
     "gulp-webpack": "^0.4.1"
+  },
+  "dependencies": {
+    "gulp-autoprefixer": "^2.1.0"
   }
 }

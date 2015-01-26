@@ -9,6 +9,17 @@ var webpackConfig = require('./webpack.config.js')[environment];
 var port = $.util.env.port || 1337;
 var app = 'app/';
 var dist = 'dist/';
+var autoprefixerBrowsers = [                 
+  'ie >= 9',
+  'ie_mob >= 10',
+  'ff >= 30',
+  'chrome >= 34',
+  'safari >= 6',
+  'opera >= 23',
+  'ios >= 6',
+  'android >= 4.4',
+  'bb >= 10'
+];
 
 gulp.task('scripts', function() {
   return gulp.src(webpackConfig.entry)
@@ -22,8 +33,8 @@ gulp.task('scripts', function() {
 // copy html from app to dist
 gulp.task('html', function() {
   return gulp.src(app + 'index.html')
-    .pipe($.size({ title : 'html' }))
     .pipe(gulp.dest(dist))
+    .pipe($.size({ title : 'html' }))
     .pipe($.connect.reload());
 });
 
@@ -37,8 +48,9 @@ gulp.task('styles',function(cb) {
       // include 'normal' css into main.css
       'include css' : true
     }))
-    .pipe($.size({ title : 'css' }))
+    .pipe($.autoprefixer({browsers: autoprefixerBrowsers}))
     .pipe(gulp.dest(dist + 'css/'))
+    .pipe($.size({ title : 'css' }))
     .pipe($.connect.reload());
 });
 
