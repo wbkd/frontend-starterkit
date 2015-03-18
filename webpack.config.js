@@ -1,17 +1,19 @@
-var entry = './app/scripts/main.js',
-  output = {
-    path: __dirname,
-    filename: 'main.js'
+module.exports.getConfig = function(type) {
+
+  var isDev = type === 'development';
+
+  var config = {
+    entry: './app/scripts/main.js',
+    output: {
+      path: __dirname,
+      filename: 'main.js'
+    },
+    debug : isDev
   };
 
-module.exports.development = {
-    debug : true,
-    devtool : 'eval',
-    entry: entry,
-    output: output 
-};
+  if(isDev){
+    config.devtool = 'eval';
+  }
 
-module.exports.production = {
-    entry: entry,
-    output: output 
-};
+  return config;
+}
