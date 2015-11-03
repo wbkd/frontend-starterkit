@@ -23,6 +23,8 @@
     "gulp-util": "^3.0.1",
     "gulp-watch": "^1.0.7",
     "gulp-webpack": "^0.4.1",
+    "lodash.assign": "^3.2.0",
+    "merge": "^1.2.0",
     "webpack": "^1.12.2"
   }
 }

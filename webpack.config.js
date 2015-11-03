@@ -1,28 +1,44 @@
 var webpack = require('webpack');
+var assign = require('lodash.assign');
 
-module.exports.getConfig = function(type) {
+var configDefault = {
+  entry: './app/scripts/main.js',
+  output: {
+    path: __dirname,
+    filename: 'main.js'
+  },
+  module: {
+    preLoaders: [
+      {test: /\.js$/, loader: 'eslint-loader', exclude: /node_modules/}
+    ]
+  },
+  debug: true
+};
 
-  var isDev = type === 'development';
+var configProd = {
+  plugins : [new webpack.optimize.UglifyJsPlugin()],
+  debug: false
+};
 
-  var config = {
-    entry: './app/scripts/main.js',
-    output: {
-      path: __dirname,
-      filename: 'main.js'
-    },
-    module: {
-      preLoaders: [
-        {test: /\.js$/, loader: 'eslint-loader', exclude: /node_modules/}
-      ]
-    },
-    debug : isDev
-  };
+var configDev = {
+  devtool : 'eval'
+};
 
-  if(isDev){
-    config.devtool = 'eval';
-  }else {
-    config.plugins = [new webpack.optimize.UglifyJsPlugin()]
-  }
+function getConfigProd() {
+  return assign(configProd, configDefault);
+};
 
-  return config;
-}
+function getConfigDev() {
+  return assign(configDev, configDefault);
+};
+
+function getConfigByType(type) {
+  var isProd = type === 'production';
+  return isProd ? getConfigProd() : getConfigDev();
+};
+
+module.exports = {
+  getConfigByType : getConfigByType,
+  getConfigDev: getConfigDev,
+  getConfigProd: getConfigProd
+};
