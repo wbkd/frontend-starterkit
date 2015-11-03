@@ -25,11 +25,11 @@ var configDev = {
 };
 
 function getConfigProd() {
-  return assign(configProd, configDefault);
+  return assign(configDefault, configProd);
 };
 
 function getConfigDev() {
-  return assign(configDev, configDefault);
+  return assign(configDefault, configDev);
 };
 
 function getConfigByType(type) {
