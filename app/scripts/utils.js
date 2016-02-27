@@ -4,7 +4,7 @@
  */
 
 
-var debugMode = true;
+const DEBUG = true;
 
 /////////////////////
 /// devices helper //
@@ -48,7 +48,7 @@ function numberFormat(number) {
 
 // add some classes to the html element
 function addHelperClasses() {
-  var htmlElement = document.getElementsByTagName('html')[0],
+  let htmlElement = document.getElementsByTagName('html')[0],
     className = [];
 
   if (isOldBrowser) {
@@ -67,11 +67,11 @@ function addHelperClasses() {
 }
 
 function log(){
-  if(!debugMode) {
+  if(!DEBUG) {
     return false;
   }
   
-  var args = Array.prototype.slice.call(arguments);
+  const args = Array.prototype.slice.call(arguments);
 
   if(args.length === 1){
     args = args[0];
@@ -80,17 +80,14 @@ function log(){
   console.log(args);  
 }
 
-module.exports = {
-
-  isMobile: isMobile,
-  isSmartphone: isSmartphone,
-  isOldBrowser: isOldBrowser,
-  clickEvent: clickEvent,
-
-  isUndefined: isUndefined,
-  isNumeric: isNumeric,
-  numberFormat: numberFormat,
-  addHelperClasses: addHelperClasses,
-  log : log
-
+export default {
+  isMobile,
+  isSmartphone,
+  isOldBrowser,
+  clickEvent,
+  isUndefined,
+  isNumeric,
+  numberFormat,
+  addHelperClasses,
+  log
 };

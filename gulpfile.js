@@ -1,15 +1,17 @@
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
-var del = require('del');
-// set variable via $ gulp --type production
-var environment = $.util.env.type || 'development';
-var isProduction = environment === 'production';
-var webpackConfig = require('./webpack.config.js').getConfigByType(environment);
+const gulp = require('gulp');
+const $ = require('gulp-load-plugins')();
+const del = require('del');
+// set env via $ gulp --type production
+const environment = $.util.env.type || 'development';
+const isProduction = environment === 'production';
+const webpackConfig = require('./webpack.config.js').getConfigByType(environment);
+const webpack = require('webpack-stream');
+const browserSync = require('browser-sync');
+const reload = browserSync.reload;
 
-var port = $.util.env.port || 1337;
-var app = 'app/';
-var dist = 'dist/';
-var autoprefixerBrowsers = [                 
+const app = 'app/';
+const dist = 'dist/';
+const autoprefixerBrowsers = [                 
   'ie >= 9',
   'ie_mob >= 10',
   'ff >= 25',
@@ -21,24 +23,22 @@ var autoprefixerBrowsers = [
   'bb >= 10'
 ];
 
-gulp.task('scripts', function() {
+const scriptsTask = function() {
   return gulp.src(webpackConfig.entry)
-    .pipe($.webpack(webpackConfig))
+    .pipe(webpack(webpackConfig))
     .pipe($.size({ title : 'js' }))
     .pipe(gulp.dest(dist + 'js/'))
-    .pipe($.connect.reload());
-});
+    .pipe(reload({ stream:true }));
+};
 
-// copy html from app to dist
-gulp.task('html', function() {
+const htmlTask = function() {
   return gulp.src(app + 'index.html')
     .pipe(gulp.dest(dist))
     .pipe($.size({ title : 'html' }))
-    .pipe($.connect.reload());
-});
+    .pipe(reload({ stream:true }));
+};
 
-gulp.task('styles',function(cb) {
-
+const stylusTask = function() {
   // convert stylus to css
   return gulp.src(app + 'stylus/main.styl')
     .pipe($.stylus({
@@ -50,37 +50,39 @@ gulp.task('styles',function(cb) {
     .pipe($.autoprefixer({browsers: autoprefixerBrowsers}))
     .pipe(gulp.dest(dist + 'css/'))
     .pipe($.size({ title : 'css' }))
-    .pipe($.connect.reload());
-});
+    .pipe(reload({ stream:true }));
+};
 
-// add livereload on the given port
-gulp.task('serve', function() {
-  $.connect.server({
-    root: dist,
-    port: port,
-    livereload: {
-      port: 35729
+const serveTask = function() {
+  browserSync({
+    server: {
+      baseDir: dist
     }
   });
-});
+};
 
-// copy images
-gulp.task('images', function(cb) {
+const imagesTask = function(){
   return gulp.src(app + 'images/**/*.{png,jpg,jpeg,gif,svg}')
     .pipe($.size({ title : 'images' }))
-    .pipe(gulp.dest(dist + 'images/'));
-});
+    .pipe(gulp.dest(dist + 'images/')); 
+};
 
-// watch styl, html and js file changes
-gulp.task('watch', function() {
+const watchTask = function(){
   gulp.watch(app + 'stylus/*.styl', ['styles']);
   gulp.watch(app + 'index.html', ['html']);
   gulp.watch(app + 'scripts/**/*.js', ['scripts']);
-});
+};
+
+gulp.task('scripts', scriptsTask);
+gulp.task('html', htmlTask);
+gulp.task('styles', stylusTask);
+gulp.task('serve', serveTask);
+gulp.task('images', imagesTask);
+gulp.task('watch', watchTask);
 
 // remove bundels
 gulp.task('clean', function(cb) {
-  del([dist], cb);
+  return del([dist], cb);
 });
 
 // by default build project and then watch files in order to trigger livereload
@@ -88,5 +90,10 @@ gulp.task('default', ['build', 'serve', 'watch']);
 
 // waits until clean is finished then builds the project
 gulp.task('build', ['clean'], function(){
-  gulp.start(['images','html','scripts','styles']);
+  imagesTask();
+  htmlTask();
+  scriptsTask();
+  stylusTask();
+
+  return true;
 });

@@ -13,8 +13,7 @@ $ npm install
 
 ## Development
 
-Builds the application and starts a webserver with livereload. By default the webserver starts at port 1337.
-You can define a port with `$ gulp --port 3333`.
+Builds the application and starts a webserver with livereload. By default the webserver starts at port 3000.
 
 ```
 $ gulp
@@ -34,24 +33,6 @@ Builds a minified version of the application in the dist folder.
 ```
 $ gulp build --type production
 ```
-
-## Webpack Hints
-
-### Imports Loader
-
-If you want to use plugins for a certain library, that does not require dependencies you can use the [imports loader](http://webpack.github.io/docs/shimming-modules.html#imports-loader). Here the file 'awesome-plugin.js' expects a global variable called jQuery. We can just import that variable via ```jQuery=path/to/jQuery```.
-
-Install the imports loader via:
-
-```
-npm install --save imports-loader
-```
-You can use it in your code like:
-
-```
-require("imports?jQuery=../bower_components/jquery/dist/jquery!./awesome-plugin.js");
-```
-
 
 
 

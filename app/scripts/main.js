@@ -1,7 +1,4 @@
-var utils = require('./utils');
-
-// for example:
-// var $ = require('../bower_components/jquery/dist/jquery');
+const utils = require('./utils');
 
 utils.addHelperClasses();
 
