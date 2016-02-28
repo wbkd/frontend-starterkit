@@ -39,5 +39,4 @@ $ gulp build --type production
 ###Requirements
 * node
 * npm
-* bower
 * gulp
