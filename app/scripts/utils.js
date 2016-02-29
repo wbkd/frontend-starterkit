@@ -71,7 +71,7 @@ function log(){
     return false;
   }
   
-  const args = Array.prototype.slice.call(arguments);
+  let args = Array.prototype.slice.call(arguments);
 
   if(args.length === 1){
     args = args[0];
