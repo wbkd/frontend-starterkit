@@ -1,6 +1,6 @@
-const utils = require('./utils');
+import Utils from './utils';
 
-utils.addHelperClasses();
+Utils.addHelperClasses();
 
-utils.log('is mobile',utils.isMobile);
-utils.log('is smartphone',utils.isSmartphone);
+Utils.log('is mobile', Utils.isMobile);
+Utils.log('is smartphone', Utils.isSmartphone);
